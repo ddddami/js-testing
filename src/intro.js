@@ -15,3 +15,9 @@ export function calculateAverage(numbers) {
   if (numbers.length === 0) return NaN;
   return numbers.reduce((sum, current) => current + sum, 0) / numbers.length;
 }
+
+export function factorial(n) {
+  if (n === 0) return 1;
+  if (n < 0) return undefined;
+  return n * factorial(n - 1);
+}
