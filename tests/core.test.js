@@ -1,5 +1,10 @@
 import { it, expect, describe } from "vitest";
-import { calculateDiscount, getCoupons, validateUserInput } from "../src/core";
+import {
+  calculateDiscount,
+  getCoupons,
+  isPriceInRange,
+  validateUserInput,
+} from "../src/core";
 
 describe("getCoupons", () => {
   it("should return an array of coupons", () => {
@@ -85,3 +90,19 @@ describe("validateUserInput", () => {
 });
 
 // Don't write unit tests based on our our functions are implemented. Because they may have bugs. Test with how the function should work in mind.
+
+describe("isPriceInRange", () => {
+  it("should return false if price is outside the boundary", () => {
+    expect(isPriceInRange(-20, 0, 10)).toBe(false);
+    expect(isPriceInRange(20, 0, 10)).toBe(false);
+  });
+
+  it("should return false if price is outside the boundary", () => {
+    expect(isPriceInRange(5, 0, 10)).toBe(true);
+  });
+
+  it("should return true if price is equal to the min or max ", () => {
+    expect(isPriceInRange(0, 0, 10)).toBe(true);
+    expect(isPriceInRange(10, 0, 10)).toBe(true);
+  });
+});
