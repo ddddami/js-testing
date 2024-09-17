@@ -1,6 +1,7 @@
 import { it, expect, describe } from "vitest";
 import {
   calculateDiscount,
+  canDrive,
   getCoupons,
   isPriceInRange,
   isValidUsername,
@@ -135,3 +136,39 @@ describe("isValidUsername", () => {
     expect(isValidUsername(1)).toBe(false);
   });
 });
+
+describe("canDrive", () => {
+  const legalDrivingAge = {
+    US: 16,
+    UK: 17,
+  };
+  it("should return invalid if given invalid couuntry code", () => {
+    expect(canDrive(18, "INVALID  ")).toMatch(/invalid/i);
+  });
+  it("should false for underage in the US", () => {
+    expect(canDrive(15, "US")).toBe(false);
+  });
+
+  it("should return true for eligible in the US", () => {
+    expect(canDrive(17, "US")).toBe(true);
+  });
+
+  it("should return true for min age in the US", () => {
+    expect(canDrive(16, "US")).toBe(true);
+  });
+
+  it("should false for underage in the UK", () => {
+    expect(canDrive(16, "UK")).toBe(false);
+  });
+
+  it("should return true for eligible in the UK", () => {
+    expect(canDrive(18, "UK")).toBe(true);
+  });
+
+  it("should return true for min age in the UK", () => {
+    expect(canDrive(17, "UK")).toBe(true);
+  });
+});
+
+// Defensive programming -> only do it at the boundary of our app.
+// analoogy: a building can have security to validate people in, once you are in, you don't need to be cjecked again.
