@@ -129,7 +129,7 @@ export function createProduct(product) {
       error: { code: "invalid_name", message: "Name is missing" },
     };
 
-  if (product.price <= 0)
+  if (!product.price || product.price <= 0)
     return {
       success: false,
       error: { code: "invalid_price", message: "Price is missing" },

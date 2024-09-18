@@ -10,6 +10,7 @@ import {
 import {
   calculateDiscount,
   canDrive,
+  createProduct,
   fetchData,
   getCoupons,
   isPriceInRange,
@@ -303,5 +304,40 @@ describe("Stack", () => {
     stack.clear();
 
     expect(stack.size()).toBe(0);
+  });
+});
+
+describe("createProduct", () => {
+  // expect(result).toEqual({
+  //   success: false,
+  //   error: { code: "invalid_price", message: "Price is missing" },
+  // });
+  it("should return successful if given right input", () => {
+    const result = createProduct({ name: "Boiler", price: 10 });
+    expect(result).toHaveProperty("success", true);
+    expect(result.message).toMatch(/success/i);
+  });
+
+  it("should return an error if given product with no name", () => {
+    const result = createProduct({ price: 10 });
+    expect(result).toHaveProperty("success", false);
+    expect(result.error).toHaveProperty("code", "invalid_name");
+    expect(result.error.message).toMatch(/missing/i);
+  });
+
+  it("should return an error if price is <= 0", () => {
+    const result = createProduct({ name: "Bongo", price: 0 });
+
+    expect(result).toHaveProperty("success", false);
+    expect(result.error).toHaveProperty("code", "invalid_price");
+    expect(result.error.message).toMatch(/missing/i);
+  });
+
+  it("should return an error if price is missing ", () => {
+    const result = createProduct({ name: "Bongo" });
+
+    expect(result).toHaveProperty("success", false);
+    expect(result.error).toHaveProperty("code", "invalid_price");
+    expect(result.error.message).toMatch(/missing/i);
   });
 });
