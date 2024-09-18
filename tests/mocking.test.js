@@ -34,3 +34,15 @@ describe("test suite", () => {
   //   toHaveBeenCalledWith
   // toHaveBeenCalledOnce
 });
+
+describe("test suite", () => {
+  test("test case", () => {
+    const sendText = vi.fn();
+    sendText.mockReturnValue("ok");
+
+    const result = sendText("hello");
+
+    expect(sendText).toHaveBeenCalledWith("hello");
+    expect(result).toMatch(/ok/i);
+  });
+});
