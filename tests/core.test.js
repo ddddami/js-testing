@@ -2,6 +2,7 @@ import { it, expect, describe } from "vitest";
 import {
   calculateDiscount,
   canDrive,
+  fetchData,
   getCoupons,
   isPriceInRange,
   isValidUsername,
@@ -191,3 +192,28 @@ describe("canDrive", () => {
 
 // Defensive programming -> only do it at the boundary of our app.
 // analoogy: a building can have security to validate people in, once you are in, you don't need to be cjecked again.
+
+// Testing async code.
+// describe("fetchData", () => {
+//   it(" should return a promise that resolves to an array of numbers", () => {
+//     fetchData().then((result) => {
+//       expect(result).toBeInstanceOf(Array);
+//       expect(result.length).toBeGreaterThan(0);
+//     });
+//   });
+// });
+
+describe("fetchData", () => {
+  it(" should return a promise that resolves to an array of numbers", async () => {
+    try {
+      const result = await fetchData();
+      expect(result).toBeInstanceOf(Array);
+      expect(result.length).toBeGreaterThan(0);
+    } catch (error) {
+      expect(error).toHaveProperty("reason");
+      expect(error.reason).toMatch(/failed/i);
+    }
+
+    // not sure you should have both.. either test a resolved or rejected promise. not sure yet.
+  });
+});
