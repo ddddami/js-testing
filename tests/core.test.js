@@ -14,6 +14,7 @@ import {
   getCoupons,
   isPriceInRange,
   isValidUsername,
+  Stack,
   validateUserInput,
 } from "../src/core";
 
@@ -237,4 +238,70 @@ describe("testSuite", () => {
   it("test case 1", () => {});
 
   it("test case 2", () => {});
+});
+
+describe("Stack", () => {
+  let stack;
+
+  beforeEach(() => {
+    stack = new Stack();
+  });
+
+  it("push should append an item to the stack", () => {
+    stack.push(1);
+
+    expect(stack.size()).toBe(1);
+  });
+
+  it("pop should remove and return the top item from the stack", () => {
+    stack.push(1);
+    stack.push(2);
+
+    expect(stack.pop()).toBe(2);
+    expect(stack.size()).toBe(1);
+  });
+
+  it("pop should throw an error if stack is empty", () => {
+    // normally, this test would always fail because our fn is going to throw an error.
+    // so we pass a call back fn, and .toThrow() with this, our test fn wont throw an error. if the call back does, vitest would catch it.
+    expect(() => stack.pop()).toThrow(/empty/i);
+  });
+
+  it("peek should return the last item in the stack without removing it", () => {
+    stack.push(1);
+    stack.push(2);
+
+    const peekedItem = stack.peek();
+    expect(peekedItem).toBe(2);
+    expect(stack.size()).toBe(2);
+  });
+
+  it("peek should throw an error if stack is empty", () => {
+    expect(() => stack.peek()).toThrow(/empty/i);
+  });
+
+  it("isEmpty should return true is stack is empty", () => {
+    expect(stack.isEmpty()).toBe(true);
+  });
+  it("isEmpty should return false is stack is not empty", () => {
+    stack.push(1);
+    expect(stack.isEmpty()).toBe(false);
+  });
+
+  it("size should return the number of items in the stack", () => {
+    stack.push(1);
+    stack.push(1);
+    stack.push(1);
+
+    expect(stack.size()).toBe(3);
+  });
+
+  it("clear should remove all items in the stack", () => {
+    stack.push(1);
+    stack.push(1);
+    stack.push(1);
+    stack.clear();
+
+    expect(stack.size()).toBe(0);
+  });
 });
