@@ -99,13 +99,23 @@ describe("isPriceInRange", () => {
     expect(isPriceInRange(20, 0, 10)).toBe(false);
   });
 
-  it("should return false if price is outside the boundary", () => {
+  it("should return false if price is within the boundary", () => {
     expect(isPriceInRange(5, 0, 10)).toBe(true);
   });
 
   it("should return true if price is equal to the min or max ", () => {
     expect(isPriceInRange(0, 0, 10)).toBe(true);
     expect(isPriceInRange(10, 0, 10)).toBe(true);
+  });
+
+  it.each([
+    { price: -20, result: false, scenario: "price < min" },
+    { price: 20, result: false, scenario: "price > min" },
+    { price: 5, result: true, scenario: "price is between min and max" },
+    { price: 0, result: true, scenario: "price equals min" },
+    { price: 10, result: true, scenario: "price equals max" },
+  ])("should return $result if $scenario", ({ price, result }) => {
+    expect(isPriceInRange(price, 0, 10)).toBe(result);
   });
 });
 
