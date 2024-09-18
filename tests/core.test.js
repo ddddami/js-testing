@@ -14,6 +14,7 @@ import {
   fetchData,
   getCoupons,
   isPriceInRange,
+  isStrongPassword,
   isValidUsername,
   Stack,
   validateUserInput,
@@ -340,4 +341,35 @@ describe("createProduct", () => {
     expect(result.error).toHaveProperty("code", "invalid_price");
     expect(result.error.message).toMatch(/missing/i);
   });
+});
+
+describe("isStrongPassword", () => {
+  const minLength = 8;
+
+  it.each([
+    { password: "a", result: false, scenario: "password is too short" },
+    {
+      password: "a".repeat(minLength),
+      result: false,
+      scenario: "password does not contain at least one uppercase letter",
+    },
+    {
+      password: "A".repeat(minLength),
+      result: false,
+      scenario: "password does not contain at least one lower letter",
+    },
+    {
+      password: "Aa".repeat(minLength),
+      result: false,
+      scenario: "password does not contain at least one digit",
+    },
+    {
+      password: "Aaaa11".repeat(minLength),
+      result: true,
+      scenario: "all conditions are met",
+    },
+  ])("should return $result if $condition", ({ password, result }) => {
+    expect(isStrongPassword(password)).toBe(result);
+  });
+  // write test for too long password and inclusion of symbol
 });
