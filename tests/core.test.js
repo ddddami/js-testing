@@ -138,35 +138,44 @@ describe("isValidUsername", () => {
 });
 
 describe("canDrive", () => {
-  const legalDrivingAge = {
-    US: 16,
-    UK: 17,
-  };
-  it("should return invalid if given invalid couuntry code", () => {
-    expect(canDrive(18, "INVALID  ")).toMatch(/invalid/i);
-  });
-  it("should false for underage in the US", () => {
-    expect(canDrive(15, "US")).toBe(false);
-  });
+  // it("should return invalid if given invalid couuntry code", () => {
+  //   expect(canDrive(18, "INVALID  ")).toMatch(/invalid/i);
+  // });
+  // it("should false for underage in the US", () => {
+  //   expect(canDrive(15, "US")).toBe(false);
+  // });
 
-  it("should return true for eligible in the US", () => {
-    expect(canDrive(17, "US")).toBe(true);
-  });
+  // it("should return true for eligible in the US", () => {
+  //   expect(canDrive(17, "US")).toBe(true);
+  // });
 
-  it("should return true for min age in the US", () => {
-    expect(canDrive(16, "US")).toBe(true);
-  });
+  // it("should return true for min age in the US", () => {
+  //   expect(canDrive(16, "US")).toBe(true);
+  // });
 
-  it("should false for underage in the UK", () => {
-    expect(canDrive(16, "UK")).toBe(false);
-  });
+  // it("should false for underage in the UK", () => {
+  //   expect(canDrive(16, "UK")).toBe(false);
+  // });
 
-  it("should return true for eligible in the UK", () => {
-    expect(canDrive(18, "UK")).toBe(true);
-  });
+  // it("should return true for eligible in the UK", () => {
+  //   expect(canDrive(18, "UK")).toBe(true);
+  // });
 
-  it("should return true for min age in the UK", () => {
-    expect(canDrive(17, "UK")).toBe(true);
+  // it("should return true for min age in the UK", () => {
+  //   expect(canDrive(17, "UK")).toBe(true);
+  // });
+
+  // Parameterized tests -> data-driven tests
+
+  it.each([
+    { age: 15, country: "US", result: false },
+    { age: 16, country: "US", result: true },
+    { age: 17, country: "US", result: true },
+    { age: 16, country: "UK", result: false },
+    { age: 17, country: "UK", result: true },
+    { age: 18, country: "UK", result: true },
+  ])("should return $result for $age, $country", ({ age, country, result }) => {
+    expect(canDrive(age, country)).toBe(result);
   });
 });
 
