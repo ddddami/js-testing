@@ -1,4 +1,12 @@
-import { it, expect, describe } from "vitest";
+import {
+  it,
+  expect,
+  describe,
+  beforeEach,
+  beforeAll,
+  afterAll,
+  afterEach,
+} from "vitest";
 import {
   calculateDiscount,
   canDrive,
@@ -216,4 +224,17 @@ describe("fetchData", () => {
 
     // not sure you should have both.. either test a resolved or rejected promise. not sure yet.
   });
+});
+
+// Setup and teardown - creating a consistent environment across our tests or to clean up any resources or state.
+
+describe("testSuite", () => {
+  beforeAll(() => console.log("beforeAll called"));
+  beforeEach(() => console.log("beforeEach called"));
+
+  afterAll(() => console.log("afterAll called"));
+  afterEach(() => console.log("afterEach called"));
+  it("test case 1", () => {});
+
+  it("test case 2", () => {});
 });
