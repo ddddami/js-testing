@@ -5,14 +5,17 @@ import {
   getPriceInCurrency,
   getShippingInfo,
   renderPage,
+  submitOrder,
 } from "../src/mocking";
 import { getExchangeRate } from "../src/libs/currency";
 import { getShippingQuote } from "../src/libs/shipping";
 import { trackPageView } from "../src/libs/analytics";
+import { charge } from "../src/libs/payment";
 
 vi.mock("../src/libs/currency");
 vi.mock("../src/libs/shipping");
 vi.mock("../src/libs/analytics");
+vi.mock("../src/libs/payment");
 
 describe("test suite", () => {
   // mockReturnValue
@@ -105,5 +108,30 @@ describe("renderPage", () => {
     const result = await renderPage();
 
     expect(trackPageView).toHaveBeenCalledWith("/home");
+  });
+});
+
+describe("submitOrder", () => {
+  const order = { totalAmount: 100 };
+  const creditCard = { creditCardNumber: 4222 };
+  it("should call charge", async () => {
+    vi.mocked(charge).mockResolvedValue({ status: "success" });
+    const result = await submitOrder(order, creditCard);
+
+    expect(charge).toHaveBeenCalledWith(creditCard, order.totalAmount);
+  });
+
+  it("should return successful is charge is successful", async () => {
+    vi.mocked(charge).mockResolvedValue({ status: "success" });
+    const result = await submitOrder(order, creditCard);
+
+    expect(result).toHaveProperty("success", true);
+  });
+
+  it("should return failed is charge is unsuccessful", async () => {
+    vi.mocked(charge).mockResolvedValue({ status: "failed" });
+    const result = await submitOrder(order, creditCard);
+
+    expect(result).toEqual({ success: false, error: "payment_error" });
   });
 });

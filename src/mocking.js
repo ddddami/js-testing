@@ -32,7 +32,7 @@ export async function submitOrder(order, creditCard) {
   if (paymentResult.status === "failed")
     return { success: false, error: "payment_error" };
 
-  return { success: true };
+  return { success: true,  };
 }
 
 // Lesson: Partial mocking
