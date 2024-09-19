@@ -196,3 +196,9 @@ describe("login", () => {
     expect(sendEmail).toHaveBeenCalledWith(email, securityCode.toString());
   });
 });
+
+//  use mocks only for testing
+// PROBLEM WITH tests that use mocks -> become dependent on implementation of our units
+// if our tests know too much of the implementation, they are more likely to break when we change implementation
+
+// USE THEM ONLY FOR MOCKING EXTERNAL DEPENDENCIES (DBS, NETWORKS, SLOW SERVICES, MAY NOT BE AVAILABLE SERVICES)
