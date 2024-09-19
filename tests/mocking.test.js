@@ -4,6 +4,7 @@ import { it, expect, describe, vi, test } from "vitest";
 import {
   getPriceInCurrency,
   getShippingInfo,
+  login,
   renderPage,
   signUp,
   submitOrder,
@@ -13,6 +14,7 @@ import { getShippingQuote } from "../src/libs/shipping";
 import { trackPageView } from "../src/libs/analytics";
 import { charge } from "../src/libs/payment";
 import { sendEmail } from "../src/libs/email";
+import security from "../src/libs/security";
 
 vi.mock("../src/libs/currency");
 vi.mock("../src/libs/shipping");
@@ -162,5 +164,20 @@ describe("signUp", () => {
   it("should return true if email is valid", async () => {
     const result = await signUp(email);
     expect(result).toBe(true);
+  });
+});
+
+// Spying on functions
+// -  sometimes, we need to monitor the behaviour of fns during test execution
+
+describe("login", () => {
+  // in addition to spying on a fn, you can also change it's implementation
+  it("should email one-time login code", async () => {
+    const email = "damilola@trulydami.me";
+    const spy = vi.spyOn(security, "generateCode");
+    await login(email);
+
+    const securityCode = spy.mock.results[0].value;
+    expect(sendEmail).toHaveBeenCalledWith(email, securityCode.toString());
   });
 });
