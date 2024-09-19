@@ -1,10 +1,12 @@
 // mock fn to test fns in isolation.
 
 import { it, expect, describe, vi, test } from "vitest";
-import { getPriceInCurrency } from "../src/mocking";
+import { getPriceInCurrency, getShippingInfo } from "../src/mocking";
 import { getExchangeRate } from "../src/libs/currency";
+import { getShippingQuote } from "../src/libs/shipping";
 
 vi.mock("../src/libs/currency");
+vi.mock("../src/libs/shipping");
 
 describe("test suite", () => {
   // mockReturnValue
@@ -63,5 +65,22 @@ describe("getPriceInCurrency", () => {
 
     const result = getPriceInCurrency(10, "NGN");
     expect(result).toBe(5);
+  });
+});
+
+describe("getShippingInfo", () => {
+  it("should return shipping cost for a destination", () => {
+    vi.mocked(getShippingQuote).mockReturnValue({ cost: 10, estimatedDays: 2 });
+    const result = getShippingInfo("Nigeria");
+
+    expect(result).toMatch(/shipping cost: \$10 \(2 days\)/i);
+  });
+
+  it("should return shipping unavailble if quote canot be fetched", () => {
+    vi.mocked(getShippingQuote).mockReturnValue(null);
+
+    const result = getShippingInfo("Nigeria");
+    expect(getShippingQuote).toHaveBeenCalled();
+    expect(result).toMatch(/unavailable/i);
   });
 });
