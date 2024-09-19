@@ -1,6 +1,6 @@
 // mock fn to test fns in isolation.
 
-import { it, expect, describe, vi, test } from "vitest";
+import { it, expect, describe, vi, test, beforeEach } from "vitest";
 import {
   getPriceInCurrency,
   getShippingInfo,
@@ -145,6 +145,21 @@ describe("submitOrder", () => {
 });
 
 describe("signUp", () => {
+  //the `mock` property is global.. it accumulates info btw different test cases.
+  // best practice, clear mocks before /  after each test
+  // CLEARING MOCKS
+  // mockClear() - clears all info about every call
+  // mockReset() - same as mockClear and change the implementation of mock fn to an empty
+  // mockRestore() - same as mockClear, but restore the inner function to the original implementation (only makes sense in spies)
+  // practically, most of the times we use mockClear.
+
+  // do for every mock fn. or vi.clearAllMocks()
+  //  or better,  configure vitest to auto clear all mocks before each test.
+  beforeEach(() => {
+    // vi.clearAllMocks()
+    vi.mocked(sendEmail).mockClear(); // not needed again cause of clearMocks: true in defineConfig
+  });
+
   const email = "damilola@trulydami.me";
   it("should call return false if email is not valid", async () => {
     const result = await signUp();
