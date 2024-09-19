@@ -1,12 +1,18 @@
 // mock fn to test fns in isolation.
 
 import { it, expect, describe, vi, test } from "vitest";
-import { getPriceInCurrency, getShippingInfo } from "../src/mocking";
+import {
+  getPriceInCurrency,
+  getShippingInfo,
+  renderPage,
+} from "../src/mocking";
 import { getExchangeRate } from "../src/libs/currency";
 import { getShippingQuote } from "../src/libs/shipping";
+import { trackPageView } from "../src/libs/analytics";
 
 vi.mock("../src/libs/currency");
 vi.mock("../src/libs/shipping");
+vi.mock("../src/libs/analytics");
 
 describe("test suite", () => {
   // mockReturnValue
@@ -82,5 +88,22 @@ describe("getShippingInfo", () => {
     const result = getShippingInfo("Nigeria");
     expect(getShippingQuote).toHaveBeenCalled();
     expect(result).toMatch(/unavailable/i);
+  });
+});
+
+// interaction testing - testing the btw different units/fns
+// -> to provide values, to test the interaction btw units
+
+describe("renderPage", () => {
+  it("should return correct content", async () => {
+    const result = await renderPage();
+
+    expect(result).toMatch(/content/i);
+  });
+
+  it("should call analytics", async () => {
+    const result = await renderPage();
+
+    expect(trackPageView).toHaveBeenCalledWith("/home");
   });
 });
