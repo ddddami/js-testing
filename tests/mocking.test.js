@@ -4,6 +4,7 @@ import { it, expect, describe, vi, test, beforeEach } from "vitest";
 import {
   getPriceInCurrency,
   getShippingInfo,
+  isOnline,
   login,
   renderPage,
   signUp,
@@ -202,3 +203,31 @@ describe("login", () => {
 // if our tests know too much of the implementation, they are more likely to break when we change implementation
 
 // USE THEM ONLY FOR MOCKING EXTERNAL DEPENDENCIES (DBS, NETWORKS, SLOW SERVICES, MAY NOT BE AVAILABLE SERVICES)
+
+// trustworthy tests are deterministic. to make sure they are -
+// should not be dep. on:
+// - any random data
+// - shared state
+// - current date and time
+// - any global - shared state
+
+describe("isOnline", () => {
+  it("should return true if current hour is inside opening hours", () => {
+    vi.setSystemTime("2024-01-01 08:05");
+    expect(isOnline()).toBe(true);
+
+    vi.setSystemTime("2024-01-01 08:00");
+    expect(isOnline()).toBe(true);
+
+    vi.setSystemTime("2024-01-01 19:59");
+    expect(isOnline()).toBe(true);
+  });
+
+  it("should return false if current hour is outside opening hours", () => {
+    vi.setSystemTime("2024-01-01 07:55");
+    expect(isOnline()).toBe(false);
+
+    vi.setSystemTime("2024-01-01 20:01");
+    expect(isOnline()).toBe(false);
+  });
+});

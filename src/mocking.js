@@ -32,7 +32,7 @@ export async function submitOrder(order, creditCard) {
   if (paymentResult.status === "failed")
     return { success: false, error: "payment_error" };
 
-  return { success: true,  };
+  return { success: true };
 }
 
 // Lesson: Partial mocking
@@ -57,7 +57,7 @@ export function isOnline() {
   const [open, close] = availableHours;
   const currentHour = new Date().getHours();
 
-  return currentHour >= open && currentHour <= close;
+  return currentHour >= open && currentHour < close;
 }
 
 // Exercise
