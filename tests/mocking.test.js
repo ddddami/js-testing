@@ -115,7 +115,7 @@ describe("renderPage", () => {
   });
 
   it("should call analytics", async () => {
-    const result = await renderPage();
+    await renderPage();
 
     expect(trackPageView).toHaveBeenCalledWith("/home");
   });
@@ -126,7 +126,7 @@ describe("submitOrder", () => {
   const creditCard = { creditCardNumber: 4222 };
   it("should call charge", async () => {
     vi.mocked(charge).mockResolvedValue({ status: "success" });
-    const result = await submitOrder(order, creditCard);
+    await submitOrder(order, creditCard);
 
     expect(charge).toHaveBeenCalledWith(creditCard, order.totalAmount);
   });
@@ -170,7 +170,7 @@ describe("signUp", () => {
 
   it("should send welcome email if email is valid", async () => {
     // vi.mocked(sendEmail).mock
-    const result = await signUp(email);
+    await signUp(email);
     // expect(sendEmail).toHaveBeenCalledWith(email, "Welcome aboard!"); to use regex for welcome aboard!
     expect(sendEmail).toHaveBeenCalled();
     const args = vi.mocked(sendEmail).mock.calls[0]; // returns what the fn has been called with
